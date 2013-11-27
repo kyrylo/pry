@@ -10,7 +10,9 @@ class Pry
       # @return [Proc] The Proc defining the valid command line options.
       attr_accessor :options
 
-      # @return [Array] The Procs that process the parsed options.
+      # @return [Array] The Procs that process the parsed options. Plugins can
+      #   utilize this facility in order to add and process their own Pry
+      #   options.
       attr_accessor :option_processors
 
       # @return [Array<String>] The input array of strings to process
@@ -76,10 +78,7 @@ class Pry
           exit
         end
 
-        # Option processors are optional.
-        if option_processors
-          option_processors.each { |processor| processor.call(opts) }
-        end
+        option_processors.each { |processor| processor.call(opts) }
 
         self
       end
